@@ -26,7 +26,7 @@ export interface PackProperties {
   rawLeaves?: boolean
 }
 
-export async function pack ({ input, blockstore: userBlockstore, hasher, maxChunkSize, maxChildrenPerNode, wrapWithDirectory, rawLeaves }: PackProperties) {
+export async function pack ({ input, blockstore: userBlockstore, hasher, maxChunkSize, maxChildrenPerNode, wrapWithDirectory, rawLeaves, cidVersion }: PackProperties  & { cidVersion?: 0 | 1 }) {
   if (!input || (Array.isArray(input) && !input.length)) {
     throw new Error('missing input file(s)')
   }
@@ -42,7 +42,8 @@ export async function pack ({ input, blockstore: userBlockstore, hasher, maxChun
       maxChunkSize: maxChunkSize || unixfsImporterOptionsDefault.maxChunkSize,
       maxChildrenPerNode: maxChildrenPerNode || unixfsImporterOptionsDefault.maxChildrenPerNode,
       wrapWithDirectory: wrapWithDirectory === false ? false : unixfsImporterOptionsDefault.wrapWithDirectory,
-      rawLeaves: rawLeaves == null ? unixfsImporterOptionsDefault.rawLeaves : rawLeaves
+      rawLeaves: rawLeaves == null ? unixfsImporterOptionsDefault.rawLeaves : rawLeaves,
+      cidVersion: typeof cidVersion === "number" ? cidVersion: 1
     })
   ))
 
